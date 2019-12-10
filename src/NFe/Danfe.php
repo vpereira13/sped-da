@@ -824,12 +824,16 @@ class Danfe extends Common
         $cdata = preg_replace('/\s\s+/', ' ', $cdata);
         $cdata = str_replace("> <", "><", $cdata);
 
+        if (strpos($cdata, '<') === false) {
+            return $cdata;
+        }
+
         $texto = strip_tags($cdata);
         $xmlClean = '<CDATA>' . $texto . '</CDATA>';
 
         //carrega o xml CDATA em um objeto DOM
         $dom = new Dom();
-        $dom->loadXML($xmlClean, LIBXML_NOBLANKS | LIBXML_NOEMPTYTAG);
+        $dom->loadXML($xmlClean, LIBXML_NOBLANKS | LIBXML_NOEMPTYTAG | LIBXML_NOERROR);
 
         //$xml = $dom->saveXML();
         //grupo CDATA infADprod
