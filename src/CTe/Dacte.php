@@ -611,7 +611,7 @@ class Dacte extends Common
                 $texto = 'Substituto';
                 break;
             default:
-                $texto = 'ERRO' . $tpCTe . $tpServ;
+                $texto = 'ERRO' . $tpCTe;
         }
         $aFont = $this->formatNegrito;
         $this->pdf->textBox($x, $y1 + 3, $w * 0.5, $h1, $texto, $aFont, 'T', 'C', 0, '', false);
@@ -1663,6 +1663,45 @@ class Dacte extends Common
     }
 
     /**
+     * É possível que não exista nenhum dos 3 tipos esperados de peso (bruto, base cálculo e aferido). Neste caso se
+     * houver algum tpMed com a descrição 'PESO', será considerado seu valor para o campo PESO BRUTO (KG) do PDF.
+     *
+     * @param string $valorPesoBaseCalculo
+     * @param string $valorPesoAferido
+     * @return string
+     */
+    private function getValidGrossWeight(string $valorPesoBaseCalculo, string $valorPesoAferido): string
+    {
+        $valorPesoBruto = $this->getTagValueByTagReference($this->infQ, 'tpMed', self::TIPOMEDIDA_PESOBRUTO, 'qCarga');
+
+        if (empty($valorPesoBruto) && empty($valorPesoBaseCalculo) && empty($valorPesoAferido)) {
+            foreach ($this->infQ as $infQ) {
+                $tpMed = $this->getTagValue($infQ, 'tpMed');
+                if (false !== strstr(strtoupper($tpMed), 'PESO')) {
+                    $valorPesoBruto = $this->getTagValueByTagReference($this->infQ, 'tpMed', $tpMed, 'qCarga');
+                    break;
+                }
+            }
+        }
+
+        return $valorPesoBruto;
+    }
+
+    /**
+     * Centraliza a inicialização dos 3 pesos padrão: bruto, base cálculo e aferido
+     *
+     * @return array
+     */
+    private function getWeights(): array
+    {
+        $valorPesoBaseCalculo = $this->getTagValueByTagReference($this->infQ, 'tpMed', self::TIPOMEDIDA_PESOBASECALCULO, 'qCarga');
+        $valorPesoAferido = $this->getTagValueByTagReference($this->infQ, 'tpMed', self::TIPOMEDIDA_PESOAFERIDO, 'qCarga');
+        $valorPesoBruto = $this->getValidGrossWeight($valorPesoBaseCalculo, $valorPesoAferido);
+
+        return [$valorPesoBruto, $valorPesoBaseCalculo, $valorPesoAferido];
+    }
+
+    /**
      * descricaoCarga
      * Monta o campo com os dados do remetente na DACTE. ( retrato  e paisagem  )
      *
@@ -1712,6 +1751,9 @@ class Dacte extends Common
         $x = $oldX;
         $this->pdf->line($x, $y, $w + 1, $y);
 
+        //Inicializa pesos: bruto, base cálculo e aferido
+        list($valorPesoBruto, $valorPesoBaseCalculo, $valorPesoAferido) = $this->getWeights();
+
         //PESO BRUTO (KG)
         $texto = 'PESO BRUTO (KG)';
         $aFont = array(
@@ -1719,7 +1761,6 @@ class Dacte extends Common
             'size' => 5,
             'style' => '');
         $this->pdf->textBox($x + 8, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $valorPesoBruto = $this->getTagValueByTagReference($this->infQ, 'tpMed', self::TIPOMEDIDA_PESOBRUTO, 'qCarga');
         $texto = number_format($valorPesoBruto, 3, ",", ".");
         $aFont = array(
             'font' => $this->fontePadrao,
@@ -1736,7 +1777,6 @@ class Dacte extends Common
             'size' => 5,
             'style' => '');
         $this->pdf->textBox($x + 20, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $valorPesoBaseCalculo = $this->getTagValueByTagReference($this->infQ, 'tpMed', self::TIPOMEDIDA_PESOBASECALCULO, 'qCarga');
         $texto = number_format($valorPesoBaseCalculo, 3, ",", ".");
         $aFont = array(
             'font' => $this->fontePadrao,
@@ -1753,7 +1793,6 @@ class Dacte extends Common
             'size' => 5,
             'style' => '');
         $this->pdf->textBox($x + 35, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $valorPesoAferido = $this->getTagValueByTagReference($this->infQ, 'tpMed', self::TIPOMEDIDA_PESOAFERIDO, 'qCarga');
         $texto = number_format($valorPesoAferido, 3, ",", ".");
         $aFont = array(
             'font' => $this->fontePadrao,
