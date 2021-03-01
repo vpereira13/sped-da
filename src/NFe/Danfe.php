@@ -275,7 +275,7 @@ class Danfe extends Common
      * @var string
      */
     protected $creditos = '';
-    
+
     protected $textadicfontsize;
 
     /**
@@ -289,7 +289,7 @@ class Danfe extends Common
         $this->debugMode();
         $this->loadDoc($xml);
     }
-    
+
     /**
      * Ativa ou desativa o modo debug
      * @param bool $activate
@@ -320,7 +320,7 @@ class Danfe extends Common
     {
         $this->creditos = trim($message);
     }
-    
+
     /**
      * Dados brutos do PDF
      * @return string
@@ -549,7 +549,7 @@ class Danfe extends Common
                 }
             }
         }
-        
+
         if ($hdadosadic < 10) {
             $hdadosadic = 10;
         }
@@ -612,7 +612,7 @@ class Danfe extends Common
         $qtdeItens = $i; //controle da quantidade de itens no DANFE
         //montagem da primeira página
         $pag = 1;
-        
+
         $x = $margEsq;
         $y = $margSup;
         //coloca o(s) canhoto(s) da NFe
@@ -624,12 +624,12 @@ class Danfe extends Common
         }
         //$x = $xInic;
         //$y = $yInic;
-        
+
         //coloca o cabeçalho
         $y = $this->header($x, $y, $pag, $totPag);
         //coloca os dados do destinatário
         $y = $this->destinatarioDANFE($x, $y+1);
-        
+
         //coloca os dados do local de retirada
         if (isset($this->retirada)) {
             $y = $this->localRetiradaDANFE($x, $y+1);
@@ -638,7 +638,7 @@ class Danfe extends Common
         if (isset($this->entrega)) {
             $y = $this->localEntregaDANFE($x, $y+1);
         }
-        
+
         //Verifica as formas de pagamento da nota fiscal
         $formaPag = [];
         if (isset($this->detPag) && $this->detPag->length > 0) {
@@ -885,11 +885,11 @@ class Danfe extends Common
         ) {
             return ['status' => false, 'message' => 'NFe CANCELADA'];
         }
-        
+
         if ($cStat == '110' ||
                $cStat == '301' ||
                $cStat == '302'
-               
+
         ) {
             return ['status' => false, 'message' => 'NFe DENEGADA'];
         }
@@ -1031,7 +1031,7 @@ class Danfe extends Common
         $w2 = $w;
         $h = 32;
         $this->pdf->textBox($x, $y, $w, $h);
-  
+
         $texto = "DANFE";
         $aFont = ['font'=>$this->fontePadrao, 'size'=>14, 'style'=>'B'];
         $this->pdf->textBox($x, $y+1, $w, $h, $texto, $aFont, 'T', 'C', 0, '');
@@ -1275,7 +1275,7 @@ class Danfe extends Common
             $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'C', 'C', 0, '');
             $this->pdf->settextcolor(0, 0, 0);
         }
-        
+
         /*
         if ($this->pNotaCancelada()) {
             //101 Cancelamento
@@ -1752,7 +1752,7 @@ class Danfe extends Common
         $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'B', 'C', 0, '');
         return ($y + $h);
     } //fim da função localEntregaDANFE
-    
+
     /**
      * localretiradaDANFE
      * Monta o campo com os dados do local de entrega na DANFE. (retrato e paisagem)
@@ -1902,7 +1902,7 @@ class Danfe extends Common
         $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'B', 'C', 0, '');
         return ($y + $h);
     } //fim da função localRetiradaDANFE
-    
+
      /**
      * getTextoFatura
      * Gera a String do Texto da Fatura
@@ -2182,7 +2182,7 @@ class Danfe extends Common
             return ($y-2);
         }
     } //fim da função pagamento
-    
+
     /**
      * impostoHelper
      * Auxilia a montagem dos campos de impostos e totais da DANFE
@@ -2747,10 +2747,6 @@ class Danfe extends Common
         $aFont = ['font'=>$this->fontePadrao, 'size'=>7, 'style'=>'B'];
         $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $y += 3;
-        //desenha a caixa dos dados dos itens da NF
-        $hmax += 1;
-        $texto = '';
-        $this->pdf->textBox($x, $y, $w, $hmax);
         //##################################################################################
         // cabecalho LOOP COM OS DADOS DOS PRODUTOS
         //CÓDIGO PRODUTO
@@ -2759,101 +2755,88 @@ class Danfe extends Common
         $h = 4;
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w1, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w1, $y, $x+$w1, $y+$hmax);
+
         //DESCRIÇÃO DO PRODUTO / SERVIÇO
         $x += $w1;
         $w2 = round($w*0.2835, 0);
         $texto = 'DESCRIÇÃO DO PRODUTO / SERVIÇO';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w2, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w2, $y, $x+$w2, $y+$hmax);
         //NCM/SH
         $x += $w2;
         $w3 = round($w*0.06, 0);
         $texto = 'NCM/SH';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w3, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w3, $y, $x+$w3, $y+$hmax);
         //O/CST ou O/CSOSN
         $x += $w3;
         $w4 = round($w*0.05, 0);
         $texto = 'O/CSOSN';//Regime do Simples CRT = 1 ou CRT = 2
         if ($this->getTagValue($this->emit, 'CRT') == '3') {
-             $texto = 'O/CST';//Regime Normal
+            $texto = 'O/CST';//Regime Normal
         }
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w4, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w4, $y, $x+$w4, $y+$hmax);
         //CFOP
         $x += $w4;
         $w5 = round($w*0.04, 0);
         $texto = 'CFOP';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w5, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w5, $y, $x+$w5, $y+$hmax);
         //UN
         $x += $w5;
         $w6 = round($w*0.03, 0);
         $texto = 'UN';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w6, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w6, $y, $x+$w6, $y+$hmax);
         //QUANT
         $x += $w6;
         $w7 = round($w*0.0465, 0);
         $texto = 'QUANT';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w7, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w7, $y, $x+$w7, $y+$hmax);
         //VALOR UNIT
         $x += $w7;
         $w8 = round($w*0.06, 0);
         $texto = 'VALOR UNIT';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w8, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w8, $y, $x+$w8, $y+$hmax);
         //VALOR TOTAL
         $x += $w8;
         $w9 = round($w*0.06, 0);
         $texto = 'VALOR TOTAL';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w9, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w9, $y, $x+$w9, $y+$hmax);
         //VALOR DESCONTO
         $x += $w9;
         $w10 = round($w*0.05, 0);
         $texto = 'VALOR DESC';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w10, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w10, $y, $x+$w10, $y+$hmax);
         //B.CÁLC ICMS
         $x += $w10;
         $w11 = round($w*0.06, 0);
         $texto = 'B.CÁLC ICMS';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w11, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w11, $y, $x+$w11, $y+$hmax);
         //VALOR ICMS
         $x += $w11;
         $w12 = round($w*0.06, 0);
         $texto = 'VALOR ICMS';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w12, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w12, $y, $x+$w12, $y+$hmax);
         //VALOR IPI
         $x += $w12;
         $w13 = round($w*0.05, 0);
         $texto = 'VALOR IPI';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w13, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w13, $y, $x+$w13, $y+$hmax);
         //ALÍQ. ICMS
         $x += $w13;
         $w14 = round($w*0.04, 0);
         $texto = 'ALÍQ. ICMS';
         $aFont = ['font'=>$this->fontePadrao, 'size'=>6, 'style'=>''];
         $this->pdf->textBox($x, $y, $w14, $h, $texto, $aFont, 'C', 'C', 0, '', false);
-        $this->pdf->line($x+$w14, $y, $x+$w14, $y+$hmax);
         //ALÍQ. IPI
         $x += $w14;
         $w15 = $w-($w1+$w2+$w3+$w4+$w5+$w6+$w7+$w8+$w9+$w10+$w11+$w12+$w13+$w14);
@@ -2874,14 +2857,20 @@ class Danfe extends Common
                 $imposto = $this->det->item($i)->getElementsByTagName("imposto")->item(0);
                 $ICMS = $imposto->getElementsByTagName("ICMS")->item(0);
                 $IPI  = $imposto->getElementsByTagName("IPI")->item(0);
-                $textoProduto = trim($this->descricaoProduto($thisItem));
 
+                $textoProduto = trim($this->descricaoProduto($thisItem));
                 $linhaDescr = $this->pdf->getNumLines($textoProduto, $w2, $aFont);
                 $h = round(($linhaDescr * $this->pdf->fontSize)+ ($linhaDescr * 0.5), 2);
+
+                // Dados do Veiculo Somente para veiculo 0 Km
+                $veicProd = $prod->getElementsByTagName("veicProd")->item(0);
+                // Se for um veiculo separa +32 de distancia para os novos dados que entram na descrição
+                if (!empty($veicProd)) {
+                    $h += 32;
+                }
+
                 $hUsado += $h;
-
                 $diffH = $hmax - $hUsado;
-
                 if ($pag != $totpag) {
                     if (1 > $diffH && $i < $totItens) {
                         //ultrapassa a capacidade para uma única página
@@ -2890,25 +2879,30 @@ class Danfe extends Common
                         break;
                     }
                 }
-                $y_linha=$y+$h;
-                // linha entre itens
-                $this->pdf->dashedHLine($oldX, $y_linha, $w, 0.1, 120);
+
                 //corrige o x
                 $x=$oldX;
                 //codigo do produto
                 $texto = $prod->getElementsByTagName("cProd")->item(0)->nodeValue;
                 $this->pdf->textBox($x, $y, $w1, $h, $texto, $aFont, 'T', 'C', 0, '');
                 $x += $w1;
+
                 //DESCRIÇÃO
                 if ($this->orientacao == 'P') {
-                    $this->pdf->textBox($x, $y, $w2, $h, $textoProduto, $aFont, 'T', 'L', 0, '', false);
+                    $sizeDescr = $this->pdf->textBox($x, $y, $w2, $h, $textoProduto, $aFont, 'T', 'L', 0, '', false);
                 } else {
-                    $this->pdf->textBox($x, $y, $w2, $h, $textoProduto, $aFont, 'T', 'L', 0, '', false);
+                    $sizeDescr = $this->pdf->textBox($x, $y, $w2, $h, $textoProduto, $aFont, 'T', 'L', 0, '', false);
                 }
+                // Tag somente é gerada para veiculo 0k, e só é permitido um veiculo por NF-e por conta do detran
+                // Verifica se a Tag existe
+                if (!empty($veicProd)) {
+                    $this->dadosItenVeiculoDANFE($x, $y + $sizeDescr, $nInicio, $h, $prod);
+                }
+
                 $x += $w2;
                 //NCM
                 $texto = ! empty($prod->getElementsByTagName("NCM")->item(0)->nodeValue) ?
-                        $prod->getElementsByTagName("NCM")->item(0)->nodeValue : '';
+                    $prod->getElementsByTagName("NCM")->item(0)->nodeValue : '';
                 $this->pdf->textBox($x, $y, $w3, $h, $texto, $aFont, 'T', 'C', 0, '');
                 $x += $w3;
                 //CST
@@ -2955,39 +2949,39 @@ class Danfe extends Common
                 $x += $w10;
                 if (isset($ICMS)) {
                     $texto = ! empty($ICMS->getElementsByTagName("vBC")->item(0)->nodeValue)
-                    ? number_format(
-                        $ICMS->getElementsByTagName("vBC")->item(0)->nodeValue,
-                        2,
-                        ",",
-                        "."
-                    )
-                    : '0, 00';
+                        ? number_format(
+                            $ICMS->getElementsByTagName("vBC")->item(0)->nodeValue,
+                            2,
+                            ",",
+                            "."
+                        )
+                        : '0, 00';
                     $this->pdf->textBox($x, $y, $w11, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 }
                 //Valor do ICMS
                 $x += $w11;
                 if (isset($ICMS)) {
                     $texto = ! empty($ICMS->getElementsByTagName("vICMS")->item(0)->nodeValue)
-                    ? number_format(
-                        $ICMS->getElementsByTagName("vICMS")->item(0)->nodeValue,
-                        2,
-                        ",",
-                        "."
-                    )
-                    : '0, 00';
+                        ? number_format(
+                            $ICMS->getElementsByTagName("vICMS")->item(0)->nodeValue,
+                            2,
+                            ",",
+                            "."
+                        )
+                        : '0, 00';
                     $this->pdf->textBox($x, $y, $w12, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 }
                 //Valor do IPI
                 $x += $w12;
                 if (isset($IPI)) {
                     $texto = ! empty($IPI->getElementsByTagName("vIPI")->item(0)->nodeValue)
-                    ? number_format(
-                        $IPI->getElementsByTagName("vIPI")->item(0)->nodeValue,
-                        2,
-                        ",",
-                        "."
-                    )
-                    :'';
+                        ? number_format(
+                            $IPI->getElementsByTagName("vIPI")->item(0)->nodeValue,
+                            2,
+                            ",",
+                            "."
+                        )
+                        :'';
                 } else {
                     $texto = '';
                 }
@@ -2996,40 +2990,34 @@ class Danfe extends Common
                 $x += $w13;
                 if (isset($ICMS)) {
                     $texto = ! empty($ICMS->getElementsByTagName("pICMS")->item(0)->nodeValue)
-                    ? number_format(
-                        $ICMS->getElementsByTagName("pICMS")->item(0)->nodeValue,
-                        2,
-                        ",",
-                        "."
-                    )
-                    : '0, 00';
+                        ? number_format(
+                            $ICMS->getElementsByTagName("pICMS")->item(0)->nodeValue,
+                            2,
+                            ",",
+                            "."
+                        )
+                        : '0, 00';
                     $this->pdf->textBox($x, $y, $w14, $h, $texto, $aFont, 'T', 'C', 0, '');
                 }
                 //%IPI
                 $x += $w14;
                 if (isset($IPI)) {
                     $texto = ! empty($IPI->getElementsByTagName("pIPI")->item(0)->nodeValue)
-                    ? number_format(
-                        $IPI->getElementsByTagName("pIPI")->item(0)->nodeValue,
-                        2,
-                        ",",
-                        "."
-                    )
-                    : '';
+                        ? number_format(
+                            $IPI->getElementsByTagName("pIPI")->item(0)->nodeValue,
+                            2,
+                            ",",
+                            "."
+                        )
+                        : '';
                 } else {
                     $texto = '';
                 }
                 $this->pdf->textBox($x, $y, $w15, $h, $texto, $aFont, 'T', 'C', 0, '');
 
-
-                // Dados do Veiculo Somente para veiculo 0 Km
-                $veicProd = $prod->getElementsByTagName("veicProd")->item(0);
-                // Tag somente é gerada para veiculo 0k, e só é permitido um veiculo por NF-e por conta do detran
-                // Verifica se a Tag existe
-                if (!empty($veicProd)) {
-                    $this->dadosItenVeiculoDANFE($oldX, $y, $nInicio, $h, $prod);
-                }
-
+                $y_linha=$y+$h;
+                // linha entre itens
+                $this->pdf->dashedHLine($oldX, $y_linha, $w, 0.1, 120);
 
                 $y += $h;
                 $i++;
@@ -3039,9 +3027,40 @@ class Danfe extends Common
                 $i++;
             }
         }
-        return $oldY+$hmax;
-    }
+        //desenha a caixa dos dados dos itens da NF
+        $texto = '';
+        $this->pdf->textBox($oldX, $oldY+3, $w, ($y - $oldY));
+        $x = $oldX + $w1;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w2;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w3;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w4;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w5;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w6;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w7;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w8;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w9;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w10;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w11;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w12;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w13;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
+        $x += $w14;
+        $this->pdf->line($x, $oldY+3, $x, $y+3);
 
+        return $y;
+    }
 
     /**
      * dadosItenVeiculoDANFE
@@ -3165,57 +3184,57 @@ class Danfe extends Common
         $veiculoDistancia = $veicProd->getElementsByTagName("dist")->item(0)->nodeValue;
 
         $x = $oldX;
+        $spaceItens = 2;
 
-        $yVeic = $y + $h;
+        $yVeic = $y;
         $texto = 'Chassi: ............: ' . $veiculoChassi;
         $this->pdf->textBox($x, $yVeic, $w1+40, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $yVeic += $spaceItens;
         $texto = 'Cor...................: ' . $veiculoCor;
         $this->pdf->textBox($x, $yVeic, $w1+40, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $yVeic += $spaceItens;
         $texto = 'Cilindrada........: ' . $veiculoCilindrada;
         $this->pdf->textBox($x, $yVeic, $w1+40, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $yVeic += $spaceItens;
         $texto = 'Cmkg...............: ' . $veiculoCmkg;
         $this->pdf->textBox($x, $yVeic, $w1+40, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $yVeic += $spaceItens;
         $texto = 'Tipo.................: ' . ($renavamTiposVeiculos[intval($veiculoTipo)] ?? $veiculoTipo);
-         $this->pdf->textBox($x, $yVeic, $w1+40, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic = $y + $h;
-        $xVeic = $x + 65;
+        $this->pdf->textBox($x, $yVeic, $w1+40, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Nº Motor: .........: ' . $veiculoMotor;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Renavam...........: ' . $veiculoRenavam;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'HP.....................: ' . $veiculoHp;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Placa.................: ' . $veiculoPlaca;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Tipo Pintura......: ' . ($renavamEspecie[intval($veiculoTipoPintura)] ?? $veiculoTipoPintura);
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic = $y + $h;
-        $xVeic = $xVeic + 55;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Marca / Modelo.....: ' . $veiculoMarcaModelo;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Especie..................: ' . ($renavamEspecie[intval($veiculoEspecie)] ?? $veiculoEspecie);
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Combustivel..........: ' . ($renavamCombustivel[intval($veiculoCombustivel)] ?? $veiculoCombustivel);
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Serial.....................: ' . $veiculoSerial;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Ano Fab/Mod........: '. $veiculoFabricacao . '/' . $veiculoModelo;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $yVeic += $h;
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $yVeic += $spaceItens;
         $texto = 'Distancia Entre Eixos(mm)..: '. $veiculoDistancia;
-        $this->pdf->textBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+        $this->pdf->textBox($x, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
+
     }
 
     /**
@@ -3397,7 +3416,7 @@ class Danfe extends Common
      */
     protected function rodape($x)
     {
-        
+
         $y = $this->maxH - 4;
         if ($this->orientacao == 'P') {
               $w = $this->wPrint;
@@ -3711,7 +3730,7 @@ class Danfe extends Common
         }
         return $saida;
     }
-    
+
     private function loadDoc($xml)
     {
         $this->xml = $xml;
@@ -3750,7 +3769,7 @@ class Danfe extends Common
             $this->infProt = $this->dom->getElementsByTagName("infProt")->item(0);
         }
     }
-    
+
     private function imagePNGtoJPG($original)
     {
         $image = imagecreatefrompng($original);
