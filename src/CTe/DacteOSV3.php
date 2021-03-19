@@ -1809,6 +1809,18 @@ class DacteOSV3 extends Common
     } //fim da função zModalRod
 
     /**
+     * zModalAereo
+     * Monta o campo com os dados do remetente na DACTE. ( retrato  e paisagem  )
+     *
+     * @param  number $x Posição horizontal canto esquerdo
+     * @param  number $y Posição vertical canto superior
+     * @return number Posição vertical final
+     */
+    protected function zModalAereo($x=0, $y=0){
+        //TODO Workaround until to be developed
+    }
+
+    /**
      * zModalAquaviario
      * Monta o campo com os dados do remetente na DACTE. ( retrato  e paisagem  )
      *
