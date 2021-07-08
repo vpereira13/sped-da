@@ -734,6 +734,8 @@ class Danfe extends Common
         $cdata = str_replace(']]>', '</CDATA>', $cdata);
         $cdata = preg_replace('/\s\s+/', ' ', $cdata);
         $cdata = str_replace("> <", "><", $cdata);
+        $cdata = str_replace("<br />", ' ', $cdata);
+
         $len = strlen($cdata);
         $startPos = strpos($cdata, '<');
         if ($startPos === false) {
