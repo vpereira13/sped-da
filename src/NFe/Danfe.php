@@ -278,6 +278,8 @@ class Danfe extends Common
 
     protected $textadicfontsize;
 
+    protected $status = '';
+
     /**
      * __construct
      *
@@ -289,6 +291,17 @@ class Danfe extends Common
         $this->debugMode();
         $this->loadDoc($xml);
     }
+
+    private function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): string
+    {
+        return $this->status = $status;
+    }
+
 
     /**
      * Ativa ou desativa o modo debug
@@ -1278,19 +1291,18 @@ class Danfe extends Common
             $this->pdf->settextcolor(0, 0, 0);
         }
 
-        /*
-        if ($this->pNotaCancelada()) {
+        if ($this->getStatus() == 'canceled') {
             //101 Cancelamento
             $x = 10;
             $y = $this->hPrint-130;
             $h = 25;
             $w = $maxW-(2*$x);
             $this->pdf->SetTextColor(90, 90, 90);
-            $texto = "NFe CANCELADA";
+            $texto = "NF-e CANCELADA";
             $aFont = ['font'=>$this->fontePadrao, 'size'=>48, 'style'=>'B'];
             $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'C', 'C', 0, '');
             $this->pdf->SetTextColor(0, 0, 0);
-        }*/
+        }
 
         if ($this->notaDpec() || $this->tpEmis == 4) {
             //DPEC
@@ -1306,15 +1318,15 @@ class Danfe extends Common
             $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'C', 'C', 0, '');
             $this->pdf->SetTextColor(0, 0, 0);
         }
-        /*
-        if ($this->pNotaDenegada()) {
+
+        if ($this->getStatus() == 'denied') {
             //110 301 302 Denegada
             $x = 10;
             $y = $this->hPrint-130;
             $h = 25;
             $w = $maxW-(2*$x);
             $this->pdf->SetTextColor(90, 90, 90);
-            $texto = "NFe USO DENEGADO";
+            $texto = "NF-e USO DENEGADO";
             $aFont = ['font'=>$this->fontePadrao, 'size'=>48, 'style'=>'B'];
             $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'C', 'C', 0, '');
             $y += $h;
@@ -1330,8 +1342,7 @@ class Danfe extends Common
             $this->pdf->textBox($x, $y, $w, $h, $texto, $aFont, 'C', 'C', 0, '');
             $this->pdf->SetTextColor(0, 0, 0);
         }
-         *
-         */
+
         //indicar sem valor
         /*
         if ($tpAmb != 1) {
