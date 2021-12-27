@@ -711,7 +711,7 @@ class Damdfe extends Common
             }
             $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
             $this->pdf->textBox($x1, $y, $x2, 8, $texto, $aFont, 'T', 'L', 0, '', false);
-            $texto = number_format($this->qCarga, 4, ',', '.');
+            $texto = !empty($this->qCarga) ? number_format($this->qCarga, 4, ',', '.') : '';
             $aFont = array('font' => $this->fontePadrao, 'size' => 10, 'style' => 'B');
             $this->pdf->textBox($x1, $y + 4, $x2, 10, $texto, $aFont, 'T', 'C', 0, '', false);
         }
@@ -733,7 +733,7 @@ class Damdfe extends Common
                 $texto = 'Peso Total (Ton)';
             }
             $this->pdf->textBox($x, $ya, $maxW / 2, 8, $texto, $aFont, 'T', 'L', 0, '');
-            $texto = number_format($this->qCarga, 4, ',', '.');
+            $texto = !empty($this->qCarga) ? number_format($this->qCarga, 4, ',', '.') : '';
             $aFont = array('font' => $this->fontePadrao, 'size' => 10, 'style' => 'B');
             $this->pdf->textBox($x, $ya + 4, $x2, 10, $texto, $aFont, 'T', 'L', 0, '', false);
         }
@@ -756,8 +756,8 @@ class Damdfe extends Common
         $this->pdf->textBox($x, $y, $maxW / 2, 8, $texto, $aFont, 'T', 'L', 0, '');
         $aFont = array('font' => $this->fontePadrao, 'size' => 10, 'style' => '');
         if (is_object($this->mdfeProc)) {
-            $tsHora = $this->toTimestamp($this->dhRecbto);
-            $texto = $this->nProt . ' - ' . date('d/m/Y H:i:s', $tsHora);
+            $tsHora = !empty($this->dhRecbto) ? $this->toTimestamp($this->dhRecbto) : '';
+            $texto = $this->nProt . ' - ' . $tsHora;
         } else {
             $texto = 'DAMDFE impresso em contingência - ' . date('d/m/Y   H:i:s');
         }
@@ -768,7 +768,7 @@ class Damdfe extends Common
         // chave de acesso
         $this->pdf->textBox($x + $maxW / 2, $y, $maxW / 2, 17);
         $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => 'I');
-        $tsHora = $this->toTimestamp($this->dhEvento);
+        $tsHora = !empty($this->dhEvento) ? $this->toTimestamp($this->dhEvento) : '';
         $texto = 'Chave de Acesso';
         $this->pdf->textBox($x + $maxW / 2, $y, $maxW / 2, 6, $texto, $aFont, 'T', 'L', 0, '');
         $aFont = array('font' => $this->fontePadrao, 'size' => 10, 'style' => '');

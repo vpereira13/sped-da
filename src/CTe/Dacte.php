@@ -187,7 +187,8 @@ class Dacte extends Common
             $this->ICMSOutraUF = $this->dom->getElementsByTagName("ICMSOutraUF")->item(0);
             $this->imp = $this->dom->getElementsByTagName("imp")->item(0);
             if (!empty($this->getTagValue($this->imp, "vTotTrib"))) {
-                $textoAdic = number_format($this->getTagValue($this->imp, "vTotTrib"), 2, ",", ".");
+                $textoAdic = !empty($this->getTagValue($this->imp, "vTotTrib")) ?
+                    number_format($this->getTagValue($this->imp, "vTotTrib"), 2, ",", ".") : '';
                 $this->textoAdic = "o valor aproximado de tributos incidentes sobre o preço deste serviço é de R$"
                     . $textoAdic;
             }
@@ -813,7 +814,9 @@ class Dacte extends Common
             'style' => '');
         $this->pdf->textBox($xa, $y + 1, $wa, $h, $texto, $aFont, 'T', 'C', 0, '');
         $texto = !empty($this->ide->getElementsByTagName("dhEmi")->item(0)->nodeValue) ?
-            date('d/m/Y H:i:s', $this->toTimestamp($this->getTagValue($this->ide, "dhEmi"))) : '';
+            !empty($this->toTimestamp($this->getTagValue($this->ide, "dhEmi"))) ?
+                date('d/m/Y H:i:s', $this->toTimestamp($this->getTagValue($this->ide, "dhEmi"))) : ''
+            : '';
         $aFont = $this->formatNegrito;
         $this->pdf->textBox($xa, $y + 5, $wa, $h, $texto, $aFont, 'T', 'C', 0, '');
         $this->pdf->line($xa + $wa, $y, $xa + $wa, $y + $h + 1);
@@ -896,10 +899,11 @@ class Dacte extends Common
             if (!empty($this->protCTe)
                 && !empty($this->protCTe->getElementsByTagName("dhRecbto")->item(0)->nodeValue)
             ) {
-                $texto .= date(
-                    'd/m/Y   H:i:s',
-                    $this->toTimestamp($this->getTagValue($this->protCTe, "dhRecbto"))
-                );
+                $texto .= !empty($this->toTimestamp($this->getTagValue($this->protCTe, "dhRecbto"))) ?
+                    date(
+                        'd/m/Y H:i:s',
+                        $this->toTimestamp($this->getTagValue($this->protCTe, "dhRecbto"))
+                    ) : '';
             }
             $texto = $this->getTagValue($this->protCTe, "nProt") == '' ? '' : $texto;
         }
@@ -1744,7 +1748,7 @@ class Dacte extends Common
         $this->pdf->textBox($x + 1, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $texto = $this->getTagValue($this->infCarga, "vCarga") == "" ?
             $this->getTagValue($this->infCarga, "vMerc") : $this->getTagValue($this->infCarga, "vCarga");
-        $texto = number_format($texto, 2, ",", ".");
+        $texto = !empty($texto) ? number_format($texto, 2, ",", ".") : '';
         $aFont = $this->formatNegrito;
         $this->pdf->textBox($x + 1, $y + 3, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $y += 8;
@@ -1761,7 +1765,7 @@ class Dacte extends Common
             'size' => 5,
             'style' => '');
         $this->pdf->textBox($x + 8, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format($valorPesoBruto, 3, ",", ".");
+        $texto = !empty($valorPesoBruto) ? number_format($valorPesoBruto, 3, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 7,
@@ -1777,7 +1781,7 @@ class Dacte extends Common
             'size' => 5,
             'style' => '');
         $this->pdf->textBox($x + 20, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format($valorPesoBaseCalculo, 3, ",", ".");
+        $texto = !empty($valorPesoBaseCalculo) ? number_format($valorPesoBaseCalculo, 3, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 7,
@@ -1793,7 +1797,7 @@ class Dacte extends Common
             'size' => 5,
             'style' => '');
         $this->pdf->textBox($x + 35, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format($valorPesoAferido, 3, ",", ".");
+        $texto = !empty($valorPesoAferido) ? number_format($valorPesoAferido, 3, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 7,
@@ -1929,7 +1933,8 @@ class Dacte extends Common
         $texto = 'VALOR TOTAL DO SERVIÇO';
         $aFont = $this->formatPadrao;
         $this->pdf->textBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'C', 0, '');
-        $texto = number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".");
+        $texto = !empty($this->getTagValue($this->vPrest, "vTPrest")) ?
+            number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 9,
@@ -1941,7 +1946,8 @@ class Dacte extends Common
         $texto = 'VALOR A RECEBER';
         $aFont = $this->formatPadrao;
         $this->pdf->textBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'C', 0, '');
-        $texto = number_format($this->getTagValue($this->vPrest, "vRec"), 2, ",", ".");
+        $texto = !empty($this->getTagValue($this->vPrest, "vRec")) ?
+            number_format($this->getTagValue($this->vPrest, "vRec"), 2, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 9,
@@ -1951,12 +1957,13 @@ class Dacte extends Common
         $yIniDados += 4;
         foreach ($this->Comp as $k => $d) {
             $nome = $this->Comp->item($k)->getElementsByTagName('xNome')->item(0)->nodeValue;
-            $valor = number_format(
-                $this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue,
-                2,
-                ",",
-                "."
-            );
+            $valor = !empty($this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue) ?
+                number_format(
+                    $this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue,
+                    2,
+                    ",",
+                    "."
+                ) : '';
             if ($auxX > $w * 0.60) {
                 $yIniDados = $yIniDados + 4;
                 $auxX = $oldX;
@@ -2162,7 +2169,8 @@ class Dacte extends Common
         $cUF = $this->ide->getElementsByTagName('cUF')->item(0)->nodeValue;
         $CNPJ = "00000000000000" . $this->emit->getElementsByTagName('CNPJ')->item(0)->nodeValue;
         $CNPJ = substr($CNPJ, -14);
-        $vCT = number_format($this->getTagValue($this->vPrest, "vRec"), 2, "", "") * 100;
+        $vCT = !empty($this->getTagValue($this->vPrest, "vRec")) ?
+            number_format($this->getTagValue($this->vPrest, "vRec"), 2, "", "") * 100 : '';
         $ICMS_CST = $this->getTagValue($this->ICMS, "CST");
         switch ($ICMS_CST) {
             case '00':
@@ -2668,7 +2676,8 @@ class Dacte extends Common
             'size' => 8,
             'style' => '');
         $this->pdf->textBox($auxX, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".");
+        $texto = !empty($this->getTagValue($this->vPrest, "vTPrest")) ?
+            number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 8,
