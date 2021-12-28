@@ -515,9 +515,9 @@ class Dacte extends Common
         if (!empty($this->logomarca)) {
             $logoInfo = getimagesize($this->logomarca);
             //largura da imagem em mm
-            $logoWmm = ($logoInfo[0] / 72) * 25.4;
+            $logoWmm = $logoInfo[0] > 0 ? ($logoInfo[0] / 72) * 25.4 : 212;
             //altura da imagem em mm
-            $logoHmm = ($logoInfo[1] / 72) * 25.4;
+            $logoHmm = $logoInfo[1] > 0 ? ($logoInfo[1] / 72) * 25.4 : 129;
             if ($this->logoAlign == 'L') {
                 $nImgW = round($w / 3, 0);
                 $nImgH = round($logoHmm * ($nImgW / $logoWmm), 0);

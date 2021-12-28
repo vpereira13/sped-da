@@ -159,7 +159,7 @@ class DacteOS extends Common
             if (!is_numeric($vTrib)) {
                 $vTrib = 0;
             }
-            $textoAdic = number_format($vTrib, 2, ",", ".");
+            $textoAdic = !empty($vTrib) ? number_format($vTrib, 2, ",", ".") : '';
             $this->textoAdic = "o valor aproximado de tributos incidentes sobre o preço deste serviço é de R$"
                 .$textoAdic;
             $this->toma = $this->dom->getElementsByTagName("toma")->item(0);
@@ -447,9 +447,9 @@ class DacteOS extends Common
         if (!empty($this->logomarca)) {
             $logoInfo = getimagesize($this->logomarca);
             //largura da imagem em mm
-            $logoWmm = ($logoInfo[0] / 72) * 25.4;
+            $logoWmm = $logoInfo[0] > 0 ? ($logoInfo[0] / 72) * 25.4 : 212;
             //altura da imagem em mm
-            $logoHmm = ($logoInfo[1] / 72) * 25.4;
+            $logoHmm = $logoInfo[1] > 0 ? ($logoInfo[1] / 72) * 25.4 : 129;
             if ($this->logoAlign == 'L') {
                 $nImgW = round($w / 3, 0);
                 $nImgH = round($logoHmm * ($nImgW / $logoWmm), 0);
@@ -1177,7 +1177,8 @@ class DacteOS extends Common
         $texto = 'VALOR TOTAL DO SERVIÇO';
         $aFont = $this->formatPadrao;
         $this->pdf->textBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'C', 0, '');
-        $texto = number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".");
+        $texto = !empty($this->getTagValue($this->vPrest, "vTPrest")) ?
+            number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 9,
@@ -1189,7 +1190,8 @@ class DacteOS extends Common
         $texto = 'VALOR A RECEBER';
         $aFont = $this->formatPadrao;
         $this->pdf->textBox($x, $y, $w * 0.14, $h, $texto, $aFont, 'T', 'C', 0, '');
-        $texto = number_format($this->getTagValue($this->vPrest, "vRec"), 2, ",", ".");
+        $texto = !empty($this->getTagValue($this->vPrest, "vRec")) ?
+            number_format($this->getTagValue($this->vPrest, "vRec"), 2, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 9,
@@ -1200,12 +1202,13 @@ class DacteOS extends Common
 
         foreach ($this->Comp as $k => $d) {
             $nome = $this->Comp->item($k)->getElementsByTagName('xNome')->item(0)->nodeValue;
-            $valor = number_format(
-                $this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue,
-                2,
-                ",",
-                "."
-            );
+            $valor = !empty($this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue) ?
+                number_format(
+                    $this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue,
+                    2,
+                    ",",
+                    "."
+            ) : '';
             if ($auxX > $w * 0.60) {
                 $yIniDados = $yIniDados + 4;
                 $auxX = $oldX;
@@ -1355,7 +1358,8 @@ class DacteOS extends Common
         $cUF = $this->ide->getElementsByTagName('cUF')->item(0)->nodeValue;
         $CNPJ = "00000000000000" . $this->emit->getElementsByTagName('CNPJ')->item(0)->nodeValue;
         $CNPJ = substr($CNPJ, -14);
-        $vCT = number_format($this->getTagValue($this->vPrest, "vRec"), 2, "", "") * 100;
+        $vCT = !empty($this->getTagValue($this->vPrest, "vRec")) ?
+            number_format($this->getTagValue($this->vPrest, "vRec"), 2, "", "") * 100 : '';
         $ICMS_CST = $this->getTagValue($this->ICMS, "CST");
         switch ($ICMS_CST) {
             case '00':
@@ -1448,7 +1452,8 @@ class DacteOS extends Common
 
         $x = $oldX;
         $y = $y + 4;
-        $texto = number_format($this->getTagValue($this->infQ->item(0), "qCarga"), 3, ",", ".");
+        $texto = !empty($this->getTagValue($this->infQ->item(0), "qCarga")) ?
+            number_format($this->getTagValue($this->infQ->item(0), "qCarga"), 3, ",", ".") : '';
         $aFont = $this->formatNegrito;
         $this->pdf->textBox($x, $y, $w * 0.26, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x += $w * 0.26;
@@ -1519,7 +1524,8 @@ class DacteOS extends Common
             'size' => 8,
             'style' => '');
         $this->pdf->textBox($auxX, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".");
+        $texto = !empty($this->getTagValue($this->vPrest, "vTPrest")) ?
+            number_format($this->getTagValue($this->vPrest, "vTPrest"), 2, ",", ".") : '';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 8,
