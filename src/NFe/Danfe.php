@@ -969,9 +969,9 @@ class Danfe extends Common
                 $type == 'jpg';
             }
             //largura da imagem em mm
-            $logoWmm = ($logoInfo[0]/72)*25.4;
+            $logoWmm = $logoInfo[0] > 0 ? ($logoInfo[0]/72)*25.4 : 212;
             //altura da imagem em mm
-            $logoHmm = ($logoInfo[1]/72)*25.4;
+            $logoHmm = $logoInfo[1] > 0 ? ($logoInfo[1]/72)*25.4 : 129;
             if ($this->logoAlign=='L') {
                 $nImgW = round($w/3, 0);
                 $nImgH = round($logoHmm * ($nImgW/$logoWmm), 0);
@@ -1196,9 +1196,10 @@ class Danfe extends Common
                     $texto = ! empty($this->nfeProc->getElementsByTagName("nProt")->item(0)->nodeValue)
                     ? $this->nfeProc->getElementsByTagName("nProt")->item(0)->nodeValue
                     : '';
-                    $tsHora = $this->toTimestamp(
-                        $this->nfeProc->getElementsByTagName("dhRecbto")->item(0)->nodeValue
-                    );
+                    $tsHora = !empty($this->nfeProc->getElementsByTagName("dhRecbto")->item(0)->nodeValue) ?
+                        $this->toTimestamp(
+                            $this->nfeProc->getElementsByTagName("dhRecbto")->item(0)->nodeValue
+                    ) : '';
                     if ($texto != '') {
                         $texto .= "  -  " . date('d/m/Y H:i:s', $tsHora);
                     }
@@ -1605,7 +1606,7 @@ class Danfe extends Common
             $dhSaiEnt = ! empty($this->ide->getElementsByTagName("dhSaiEnt")->item(0)->nodeValue)
             ? $this->ide->getElementsByTagName("dhSaiEnt")->item(0)->nodeValue
             : '';
-            $tsDhSaiEnt = $this->toTimestamp($dhSaiEnt);
+            $tsDhSaiEnt = !empty($dhSaiEnt) ? $this->toTimestamp($dhSaiEnt) : '';
             if ($tsDhSaiEnt != '') {
                 $hSaiEnt = date('H:i:s', $tsDhSaiEnt);
             }
@@ -2941,11 +2942,13 @@ class Danfe extends Common
                     $alinhamento = 'R';
                 }
                 // QTDADE
-                $texto = number_format($prod->getElementsByTagName("qCom")->item(0)->nodeValue, 4, ",", ".");
+                $texto = !empty($prod->getElementsByTagName("qCom")->item(0)->nodeValue) ?
+                    number_format($prod->getElementsByTagName("qCom")->item(0)->nodeValue, 4, ",", ".") : '';
                 $this->pdf->textBox($x, $y, $w7, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 $x += $w7;
                 // Valor Unitário
-                $texto = number_format($prod->getElementsByTagName("vUnCom")->item(0)->nodeValue, 4, ",", ".");
+                $texto = !empty($prod->getElementsByTagName("vUnCom")->item(0)->nodeValue) ?
+                    number_format($prod->getElementsByTagName("vUnCom")->item(0)->nodeValue, 4, ",", ".") : '';
                 $this->pdf->textBox($x, $y, $w8, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 $x += $w8;
                 // Valor do Produto
@@ -2956,7 +2959,8 @@ class Danfe extends Common
                 $this->pdf->textBox($x, $y, $w9, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 $x += $w9;
                 //Valor do Desconto
-                $texto = number_format($prod->getElementsByTagName("vDesc")->item(0)->nodeValue, 2, ",", ".");
+                $texto = !empty($prod->getElementsByTagName("vDesc")->item(0)->nodeValue) ?
+                    number_format($prod->getElementsByTagName("vDesc")->item(0)->nodeValue, 2, ",", ".") : '';
                 $this->pdf->textBox($x, $y, $w10, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 //Valor da Base de calculo
                 $x += $w10;
@@ -3288,7 +3292,7 @@ class Danfe extends Common
         if (isset($this->ISSQNtot)) {
             $texto = ! empty($this->ISSQNtot->getElementsByTagName("vServ")->item(0)->nodeValue) ?
                     $this->ISSQNtot->getElementsByTagName("vServ")->item(0)->nodeValue : '';
-            $texto = number_format($texto, 2, ",", ".");
+            $texto = !empty($texto) ? number_format($texto, 2, ",", ".") : '';
         } else {
             $texto = '';
         }
@@ -3529,7 +3533,8 @@ class Danfe extends Common
         }
         $texto .= $this->ymdTodmy($dEmi) ." ";
         $texto .= "VALOR TOTAL: R$ ";
-        $texto .= number_format($this->ICMSTot->getElementsByTagName("vNF")->item(0)->nodeValue, 2, ",", ".") . " ";
+        $texto .= !empty($this->ICMSTot->getElementsByTagName("vNF")->item(0)->nodeValue) ?
+            number_format($this->ICMSTot->getElementsByTagName("vNF")->item(0)->nodeValue, 2, ",", ".") . " " : '';
         $texto .= "DESTINATÁRIO: ";
         $texto .= $destinatario;
         if ($this->orientacao == 'P') {
