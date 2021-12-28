@@ -2960,7 +2960,7 @@ class Danfe extends Common
                 $x += $w9;
                 //Valor do Desconto
                 $texto = !empty($prod->getElementsByTagName("vDesc")->item(0)->nodeValue) ?
-                    number_format($prod->getElementsByTagName("vDesc")->item(0)->nodeValue, 2, ",", ".") : '';
+                    number_format($prod->getElementsByTagName("vDesc")->item(0)->nodeValue, 2, ",", ".") : '0,00';
                 $this->pdf->textBox($x, $y, $w10, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 //Valor da Base de calculo
                 $x += $w10;
