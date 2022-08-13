@@ -25,4 +25,4 @@ try {
     echo $pdf;
 } catch (InvalidArgumentException $e) {
     echo "Ocorreu um erro durante o processamento :" . $e->getMessage();
-}    
+}
