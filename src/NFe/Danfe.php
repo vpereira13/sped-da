@@ -54,6 +54,13 @@ class Danfe extends Common
      */
     protected $exibirTextoFatura = false;
     /**
+     * Parâmetro do controle se deve exibir o número do item no pedido de compra
+     * na descrição do produto
+     *
+     * @var boolean
+     */
+    public $exibirNumeroItemPedido = false;
+    /**
      * Parâmetro do controle se deve concatenar automaticamente informações complementares
      * na descrição do produto, como por exemplo, informações sobre impostos.
      * @var boolean
@@ -2725,6 +2732,11 @@ class Danfe extends Common
         if ($this->descProdQuebraLinha) {
             $texto = str_replace(";", "\n", $texto);
         }
+
+        if ($this->exibirNumeroItemPedido && !empty($itemProd->getElementsByTagName('nItemPed')->item(0)->nodeValue)) {
+            $texto .= " (ITEM " . $itemProd->getElementsByTagName('nItemPed')->item(0)->nodeValue . ")";
+        }
+
         return $texto;
     }
 
