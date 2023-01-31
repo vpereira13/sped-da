@@ -1281,7 +1281,7 @@ class DacteOSV3 extends Common
         $yIniDados += 4;
 
         foreach ($this->Comp as $k => $d) {
-            $nome = $this->Comp->item($k)->getElementsByTagName('xNome')->item(0)->nodeValue;
+            $nome = $this->Comp->item($k)->getElementsByTagName('tpComp')->item(0)->nodeValue;
             $valor = number_format(
                 (float) $this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue,
                 2,

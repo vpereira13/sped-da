@@ -1951,7 +1951,7 @@ class DacteV3 extends Common
         $auxX = $oldX;
         $yIniDados += 4;
         foreach ($this->Comp as $k => $d) {
-            $nome = $this->Comp->item($k)->getElementsByTagName('xNome')->item(0)->nodeValue;
+            $nome = $this->Comp->item($k)->getElementsByTagName('tpComp')->item(0)->nodeValue;
             $valor = number_format(
                 $this->Comp->item($k)->getElementsByTagName('vComp')->item(0)->nodeValue,
                 2,
